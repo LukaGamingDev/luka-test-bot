@@ -1,2 +1,2 @@
 # Hey there
-There is nothing in this Readme 
+Read my bot source. K bye
