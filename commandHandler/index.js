@@ -8,21 +8,20 @@ module.exports = (client) => {
     const commandFiles = fs.readdirSync(path.join(__dirname, "../commands"))
     const typeFiles = fs.readdirSync(path.join(__dirname, "types"))
 
-    this.commands = commandFiles
+    client.commands = commandFiles
         .filter(file => file.endsWith(".js"))
         .map(file => require(path.join(__dirname, "../commands", file)))
 
-    this.types = typeFiles
+    client.types = typeFiles
         .filter(file => file.endsWith(".js"))
         .map(file => require(path.join(__dirname, "types", file)))
-
-    console.log(this.commands)
-    console.log(this.types)
 
     client.on("message", this.handleMessage)
 }
 
 exports.handleMessage = async (msg) => {
+    const client = msg.client
+
     // Check if message is sent by bot
     if (msg.author.bot) return
 
@@ -32,7 +31,7 @@ exports.handleMessage = async (msg) => {
 
     // Split command
     const [commandName, ...rawArgs] = parsedContent[1].split(" ")
-    const command = this.commands.find(cmd => cmd.name === commandName.toLowerCase())
+    const command = client.commands.find(cmd => cmd.name === commandName.toLowerCase())
 
     if (command == null) return
 
@@ -75,7 +74,7 @@ exports.handleMessage = async (msg) => {
             }
         }
 
-        const type = this.types.find(type => type.name === v.type)
+        const type = client.types.find(type => type.name === v.type)
         let parsed
 
         while (true) {
@@ -122,7 +121,7 @@ exports.handleMessage = async (msg) => {
     command.args.forEach((v, i) => {
         const rawArg = rawArgs[i]
         if (rawArg == null) return
-        const type = this.types.find((type) => type.name === v.type)
+        const type = client.types.find((type) => type.name === v.type)
         parsedArgs[v.name] = type.parse(msg, command, rawArg, rawArgs)
     });
 
