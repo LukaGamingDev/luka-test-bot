@@ -1,5 +1,4 @@
 const commandRegex = /^!(.+)/
-const argRegex = /\S+/
 
 const fs = require("fs")
 const path = require("path")
