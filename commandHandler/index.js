@@ -2,7 +2,6 @@ const commandRegex = /^!(.+)/
 
 const fs = require("fs")
 const path = require("path")
-const { args } = require("../commands/test")
 
 module.exports = (client) => {
     const commandFiles = fs.readdirSync(path.join(__dirname, "../commands"))
