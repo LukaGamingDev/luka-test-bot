@@ -78,10 +78,7 @@ exports.handleMessage = async (msg) => {
         const type = client.types.find(type => type.name === v.type)
         let parsed
 
-        console.log(rawArg)
-
         while (true) {
-            console.log(rawArg)
             if (rawArg == null) {
                 const defaultArg = v.default
 
@@ -90,7 +87,6 @@ exports.handleMessage = async (msg) => {
                 }else{
                     parsed = defaultArg
                 }
-                console.log(parsed)
                 break
             }
             parsed = type.parse(msg, command, rawArg, rawArgs, i)
