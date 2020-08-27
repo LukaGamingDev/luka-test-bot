@@ -1,4 +1,4 @@
-const commandRegex = /^!(.+)/
+const commandRegex = /^>(.+)/
 
 const fs = require("fs")
 const path = require("path")
@@ -37,15 +37,11 @@ exports.handleMessage = async (msg) => {
     command.args = command.args || []
 
     // Prompts
+    const parsedArgs = {}
     for (const [i, v] of command.args.entries()) {
         let rawArg = rawArgs[i]
 
-        if (rawArg == null) {
-            if (v.default !== undefined) {
-                rawArgs[i] = v.default
-                continue
-            }
-
+        if (rawArg == null && v.default === undefined) {
             const filter = m => m.author === msg.author
             try {
                 msg.channel.send({
@@ -82,7 +78,21 @@ exports.handleMessage = async (msg) => {
         const type = client.types.find(type => type.name === v.type)
         let parsed
 
+        console.log(rawArg)
+
         while (true) {
+            console.log(rawArg)
+            if (rawArg == null) {
+                const defaultArg = v.default
+
+                if (typeof defaultArg == "function") {
+                    parsed = defaultArg(msg)
+                }else{
+                    parsed = defaultArg
+                }
+                console.log(parsed)
+                break
+            }
             parsed = type.parse(msg, command, rawArg, rawArgs, i)
             if (parsed) break
 
@@ -120,15 +130,8 @@ exports.handleMessage = async (msg) => {
                 })
             }
         }
+        parsedArgs[v.name] = parsed
     }
-
-    const parsedArgs = {}
-    command.args.forEach((v, i) => {
-        const rawArg = rawArgs[i]
-        if (rawArg == null) return
-        const type = client.types.find((type) => type.name === v.type)
-        parsedArgs[v.name] = type.parse(msg, command, rawArg, rawArgs, i)
-    });
 
     command.run(msg, parsedArgs)
 }

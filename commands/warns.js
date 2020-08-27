@@ -3,7 +3,8 @@ module.exports = {
     args: [
         {
             name: "member",
-            type: "member"
+            type: "member",
+            default: (msg) => msg.member
         }
     ],
     run(msg, {member, reason}) {

@@ -12,6 +12,8 @@ module.exports = {
         }
     ],
     run(msg, {member, reason}) {
+        if (member.user.bot) return msg.channel.send("Cannot warn a bot")
+
         member.warns = member.warns || []
         member.warns.push(reason)
         msg.channel.send({
@@ -20,8 +22,6 @@ module.exports = {
                 description: `Warned **${member.user.tag}** for **${reason}**` 
             }
         }).catch(console.error)
-
-        console.log(member, reason)
 
         member.send({
             embed: {
