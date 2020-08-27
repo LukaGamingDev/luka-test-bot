@@ -37,8 +37,6 @@ module.exports = {
             }
         })
 
-        console.log("length" + formatted.length)
-        console.log(formatted.slice(1))
         if (formatted.length > 1) {
             console.log("Hello")
             for (const chunk of formatted.slice(1)) {
