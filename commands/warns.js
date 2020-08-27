@@ -5,10 +5,10 @@ function formatWarns(warns, start) {
     start = start || 0
     do {
         formatted = copy.map((reason, i) => `**${i + (1 + start)}.** ${reason}`).join("\n")
-        if (formatted.length > 2000) extra.push(copy.pop())
+        if (formatted.length > 2000) extra.unshift(copy.pop())
     } while (formatted.length > 2000)
     if (extra.length < 1) return [formatted]
-    return [formatted, ...formatWarns(extra, start + 1)]
+    return [formatted, ...formatWarns(extra, start + copy.length)]
 }
 
 module.exports = {
@@ -38,9 +38,7 @@ module.exports = {
         })
 
         if (formatted.length > 1) {
-            console.log("Hello")
             for (const chunk of formatted.slice(1)) {
-                console.log("chunk:" + chunk)
                 await msg.channel.send({
                     embed: {
                         description: chunk
