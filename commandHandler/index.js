@@ -35,12 +35,18 @@ exports.handleMessage = async (msg) => {
 
     if (command == null) return
 
+    command.args = command.args || []
+
     // Prompts
     for (const [i, v] of command.args.entries()) {
-        if (v.default !== undefined) continue
         let rawArg = rawArgs[i]
 
         if (rawArg == null) {
+            if (v.default !== undefined) {
+                rawArgs[i] = v.default
+                continue
+            }
+
             const filter = m => m.author === msg.author
             try {
                 msg.channel.send({
@@ -78,7 +84,7 @@ exports.handleMessage = async (msg) => {
         let parsed
 
         while (true) {
-            parsed = type.parse(msg, command, rawArg, rawArgs)
+            parsed = type.parse(msg, command, rawArg, rawArgs, i)
             if (parsed) break
 
             const filter = m => m.author === msg.author
@@ -122,7 +128,7 @@ exports.handleMessage = async (msg) => {
         const rawArg = rawArgs[i]
         if (rawArg == null) return
         const type = client.types.find((type) => type.name === v.type)
-        parsedArgs[v.name] = type.parse(msg, command, rawArg, rawArgs)
+        parsedArgs[v.name] = type.parse(msg, command, rawArg, rawArgs, i)
     });
 
     command.run(msg, parsedArgs)
