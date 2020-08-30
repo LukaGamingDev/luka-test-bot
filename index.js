@@ -1,12 +1,12 @@
-require("dotenv").config()
+require('dotenv').config()
 
-const {Client} = require("discord.js")
-const CommandHandler = require("./commandHandler")
+const {Client} = require('discord.js')
+const CommandHandler = require('./commandHandler')
 const client = new Client()
 
 CommandHandler(client)
 
-client.once("ready", () => {
+client.once('ready', () => {
     console.log(`Logged in as ${client.user.tag}`)
 })
 

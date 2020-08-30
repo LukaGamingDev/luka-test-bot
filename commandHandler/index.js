@@ -1,35 +1,38 @@
 const commandRegex = /^>(.+)/
 
-const fs = require("fs")
-const path = require("path")
+const fs = require('fs')
+const path = require('path')
 
 module.exports = (client) => {
-    const commandFiles = fs.readdirSync(path.join(__dirname, "../commands"))
-    const typeFiles = fs.readdirSync(path.join(__dirname, "types"))
+    const commandFiles = fs.readdirSync(path.join(__dirname, '../commands'))
+    const typeFiles = fs.readdirSync(path.join(__dirname, 'types'))
 
     client.commands = commandFiles
-        .filter(file => file.endsWith(".js"))
-        .map(file => require(path.join(__dirname, "../commands", file)))
+        .filter(file => file.endsWith('.js'))
+        .map(file => require(path.join(__dirname, '../commands', file)))
 
     client.types = typeFiles
-        .filter(file => file.endsWith(".js"))
-        .map(file => require(path.join(__dirname, "types", file)))
+        .filter(file => file.endsWith('.js'))
+        .map(file => require(path.join(__dirname, 'types', file)))
 
-    client.on("message", this.handleMessage)
+    client.on('message', this.handleMessage)
 }
 
 exports.handleMessage = async (msg) => {
-    const client = msg.client
+    // blacklist
+    if (msg.author.id === "522510960779329540") return
 
     // Check if message is sent by bot
     if (msg.author.bot) return
+
+    const client = msg.client
 
     // Check prefix
     const parsedContent = commandRegex.exec(msg.content)
     if (parsedContent == null) return
 
     // Split command
-    const [commandName, ...rawArgs] = parsedContent[1].split(" ")
+    const [commandName, ...rawArgs] = parsedContent[1].split(' ')
     const command = client.commands.find(cmd => cmd.name === commandName.toLowerCase())
 
     if (command == null) return
@@ -47,20 +50,20 @@ exports.handleMessage = async (msg) => {
                 msg.channel.send({
                     embed: {
                         title: v.prompt || `Please enter \`${v.name}\``,
-                        description: "Type `cancel` to cancel",
-                        footer: {text: "Prompt ends in 30 seconds"}
+                        description: 'Type `cancel` to cancel',
+                        footer: {text: 'Prompt ends in 30 seconds'}
                     }
                 })
                 const collected = await msg.channel.awaitMessages(filter, {
-                    errors: ["time"],
+                    errors: ['time'],
                     time: 30 * 1000,
                     max: 1
                 })
                 const response = collected.first()
-                if (response.content === "cancel") return msg.channel.send({
+                if (response.content === 'cancel') return msg.channel.send({
                     embed: {
-                        title: "Canceled",
-                        description: "Prompt canceled"
+                        title: 'Canceled',
+                        description: 'Prompt canceled'
                     }
                 })
                 rawArg = response.content
@@ -68,8 +71,8 @@ exports.handleMessage = async (msg) => {
             }catch{
                 return msg.channel.send({
                     embed: {
-                        title: "Prompt ended",
-                        description: "Ran out of time"
+                        title: 'Prompt ended',
+                        description: 'Ran out of time'
                     }
                 })
             }
@@ -82,7 +85,7 @@ exports.handleMessage = async (msg) => {
             if (rawArg == null) {
                 const defaultArg = v.default
 
-                if (typeof defaultArg == "function") {
+                if (typeof defaultArg == 'function') {
                     parsed = defaultArg(msg)
                 }else{
                     parsed = defaultArg
@@ -96,23 +99,23 @@ exports.handleMessage = async (msg) => {
             try {
                 msg.channel.send({
                     embed: {
-                        title: "Invalid argument",
+                        title: 'Invalid argument',
                         description: `You provided an invalid \`${v.type}\`\nType\`cancel\` to cancel`,
                         footer: {
-                            text: "Prompt ends in 30 seconds"
+                            text: 'Prompt ends in 30 seconds'
                         }
                     }
                 })
                 const collected = await msg.channel.awaitMessages(filter, {
-                    errors: ["time"],
+                    errors: ['time'],
                     time: 30 * 1000,
                     max: 1
                 })
                 const response = collected.first()
-                if (response.content === "cancel") return msg.channel.send({
+                if (response.content === 'cancel') return msg.channel.send({
                     embed: {
-                        title: "Canceled",
-                        description: "Prompt canceled"
+                        title: 'Canceled',
+                        description: 'Prompt canceled'
                     }
                 })
                 rawArg = response.content
@@ -120,8 +123,8 @@ exports.handleMessage = async (msg) => {
             }catch{
                 return msg.channel.send({
                     embed: {
-                        title: "Prompt ended",
-                        description: "Ran out of time"
+                        title: 'Prompt ended',
+                        description: 'Ran out of time'
                     }
                 })
             }
@@ -129,5 +132,10 @@ exports.handleMessage = async (msg) => {
         parsedArgs[v.name] = parsed
     }
 
-    command.run(msg, parsedArgs)
+    try {
+        await command.run(msg, parsedArgs)
+    } catch(e) {
+        console.error(e)
+        msg.reply(`An error occurred while running this command\n\`${e.message}\``)
+    }
 }

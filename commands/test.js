@@ -1,10 +1,10 @@
 module.exports = {
-    name: "test",
+    name: 'test',
     args: [
         {
-            prompt: "What do you want me to say?",
-            name: "text",
-            type: "string"
+            prompt: 'What do you want me to say?',
+            name: 'text',
+            type: 'string'
         }
     ],
     run(msg, {text}) {

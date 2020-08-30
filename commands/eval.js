@@ -1,15 +1,15 @@
-const {inspect} = require("util")
+const {inspect} = require('util')
 
 module.exports = {
-    name: "eval",
+    name: 'eval',
     args: [
         {
-            name: "code",
-            type: "string"
+            name: 'code',
+            type: 'string'
         }
     ],
     run(msg, {code}) {
-        if (msg.author.id !== "474648225740226591") return msg.reply("You can't use this")
+        if (msg.author.id !== '474648225740226591') return msg.reply('You can\'t use this')
 
         try {
             const result = eval(code)

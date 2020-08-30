@@ -1,12 +1,12 @@
 module.exports = {
-    name: "base64decode",
+    name: 'base64decode',
     args: [
         {
-            name: "encoded",
-            type: "string"
+            name: 'encoded',
+            type: 'string'
         }
     ],
     run(msg, {encoded}) {
-        msg.channel.send(Buffer.from(encoded, "base64").toString())
+        msg.channel.send(Buffer.from(encoded, 'base64').toString())
     }
 }

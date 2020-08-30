@@ -1,7 +1,7 @@
 const mentionRegex = /^<@!?(\d+)>$/
 
 module.exports = {
-    name: "member",
+    name: 'member',
     parse(msg, command, arg, args) {
         const matches = mentionRegex.exec(arg)
 

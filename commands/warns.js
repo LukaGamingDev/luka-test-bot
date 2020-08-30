@@ -4,7 +4,7 @@ function formatWarns(warns, start) {
     let formatted
     start = start || 0
     do {
-        formatted = copy.map((reason, i) => `**${i + (1 + start)}.** ${reason}`).join("\n")
+        formatted = copy.map((reason, i) => `**${i + (1 + start)}.** ${reason}`).join('\n')
         if (formatted.length > 2000) extra.unshift(copy.pop())
     } while (formatted.length > 2000)
     if (extra.length < 1) return [formatted]
@@ -12,11 +12,11 @@ function formatWarns(warns, start) {
 }
 
 module.exports = {
-    name: "warns",
+    name: 'warns',
     args: [
         {
-            name: "member",
-            type: "member",
+            name: 'member',
+            type: 'member',
             default: (msg) => msg.member
         }
     ],
@@ -24,7 +24,7 @@ module.exports = {
         member.warns = member.warns || []
         const formatted = member.warns.length ?
             formatWarns(member.warns):
-            ["This member has no warns"]
+            ['This member has no warns']
 
         await msg.channel.send({
             embed: {

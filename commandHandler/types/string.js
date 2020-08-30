@@ -1,8 +1,8 @@
 module.exports = {
-    name: "string",
+    name: 'string',
     parse(msg, command, arg, args, i) {
         console.log(arg, args, i)
-        if (command.args.length === i + 1) return args.slice(i).join(" ")
+        if (command.args.length === i + 1) return args.slice(i).join(' ')
         return arg
     }   
 }

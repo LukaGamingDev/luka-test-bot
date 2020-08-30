@@ -1,9 +1,9 @@
 module.exports = {
-    name: "user",
+    name: 'user',
     args: [
         {
-            name: "user",
-            type: "user"
+            name: 'user',
+            type: 'user'
         }
     ],
     run(msg, {user}) {

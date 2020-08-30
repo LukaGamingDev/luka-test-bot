@@ -1,35 +1,35 @@
 module.exports = {
-    name: "warn",
+    name: 'warn',
     args: [
         {
-            name: "member",
-            type: "member"
+            name: 'member',
+            type: 'member'
         },
         {
-            name: "reason",
-            type: "string",
-            default: "No reason"
+            name: 'reason',
+            type: 'string',
+            default: 'No reason'
         }
     ],
     run(msg, {member, reason}) {
-        if (member.user.bot) return msg.channel.send("Cannot warn a bot")
+        if (member.user.bot) return msg.channel.send('Cannot warn a bot')
 
         member.warns = member.warns || []
         member.warns.push(reason)
         msg.channel.send({
             embed: {
-                title: "Warned",
+                title: 'Warned',
                 description: `Warned **${member.user.tag}** for **${reason}**` 
             }
         }).catch(console.error)
 
         member.send({
             embed: {
-                title: "Warning",
+                title: 'Warning',
                 description: `You are warned on **${msg.guild.name}** for **${reason}**`
             }
         }).catch((e) => {
-            msg.channel.send("Failed to DM user").catch(console.error)
+            msg.channel.send('Failed to DM user').catch(console.error)
         })
     }
 }
